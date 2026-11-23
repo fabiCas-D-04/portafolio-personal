@@ -1,5 +1,5 @@
 # --- Imagen de producción del frontend (React compilado + nginx) ---
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
