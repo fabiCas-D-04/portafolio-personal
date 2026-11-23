@@ -13,6 +13,7 @@
       - 443
     deploy_dir: /opt/portfolio
     dockerhub_username: "{{ DOCKERHUB_USERNAME | default('local') }}"
+    dockerhub_token: "{{ DOCKERHUB_TOKEN | default('') }}"
     deploy_app: true
 
   tasks:
@@ -87,6 +88,13 @@
         name: ubuntu
         groups: docker
         append: true
+
+    - name: Iniciar sesión en DockerHub (opcional, si se envía DOCKERHUB_TOKEN)
+      ansible.builtin.command: docker login -u {{ dockerhub_username }} --password-stdin
+      args:
+        stdin: "{{ dockerhub_token }}"
+      no_log: true
+      when: dockerhub_token | length > 0
 
     # -------------------- Firewall (UFW) --------------------
     - name: "Configurar UFW (política por defecto: denegar entrantes)"
