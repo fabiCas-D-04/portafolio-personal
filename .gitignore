@@ -1,0 +1,41 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+.env.local
+*.local
+
+# Builds y cobertura
+dist/
+build/
+coverage/
+
+# Tests
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# Terraform (también ignorado en terraform/.gitignore)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# Ansible local
+ansible/inventory.ini
+
+# Claves y credenciales
+*.pem
+*.key
+
+# Logs y SO
+*.log
+.DS_Store
+Thumbs.db
+
+# Unity (por si se trabaja en el mismo repo)
+Library/
+Temp/
+Logs/

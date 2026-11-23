@@ -1,0 +1,17 @@
+# ============================================================
+# Rama DEV -> ejecuta TODAS las pruebas automatizadas
+# (unitarias, de integración y E2E) en cada push.
+# ============================================================
+name: DEV - Pruebas automatizadas
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Tests
+    uses: ./.github/workflows/tests.yml

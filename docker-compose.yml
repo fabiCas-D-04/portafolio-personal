@@ -1,0 +1,50 @@
+# Portafolio personal - orquestación completa
+# Uso local:        docker compose up --build
+# Uso en servidor:  docker compose pull && docker compose up -d
+# (DOCKERHUB_USERNAME se inyecta desde .env o desde el pipeline de GitHub Actions)
+
+name: portfolio
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: portfolio-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: ${DOCKERHUB_USERNAME:-local}/portfolio-backend:latest
+    build:
+      context: ./backend
+    container_name: portfolio-backend
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      MONGODB_URI: mongodb://mongo:27017/portfolio
+    ports:
+      - "4000:4000"
+
+  frontend:
+    image: ${DOCKERHUB_USERNAME:-local}/portfolio-frontend:latest
+    build:
+      context: ./frontend
+    container_name: portfolio-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mongo_data:
